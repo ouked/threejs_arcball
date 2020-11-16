@@ -1,0 +1,83 @@
+// Alex Dawkins ArcBall
+// For three.js
+
+"use strict";
+
+let ArcBall = function (camera) {
+    let mouse = {
+        pos: new THREE.Vector2(),
+        down: false
+    };
+
+    //region Mouse Events
+    const onMouseDown = function(e) {
+        mouse.pos = new THREE.Vector2(e.offsetX, e.offsetY);
+        mouse.down = true;
+    };
+
+    const onMouseUp = function(e) { mouse.down = false; };
+
+    const onMouseMove = function (e) {
+        e.preventDefault();
+        if (!mouse.down) return;
+
+        // Get how far mouse has travelled (and scale)
+        const scale = 0.01;
+        const deltaX = (mouse.pos.x - e.offsetX) * scale;
+        const deltaY = (mouse.pos.y - e.offsetY) * scale;
+
+        // Convert from cartesian to spherical coordinates
+        let spherical = new THREE.Spherical().setFromVector3(camera.position);
+
+        // Change spherical coordinates
+        spherical.set(spherical.radius, spherical.phi + deltaY, spherical.theta + deltaX);
+
+        // Convert back to Cartesian
+        const newPos = new THREE.Vector3().setFromSpherical(spherical);
+
+        // Update Camera
+        camera.position.set(newPos.x, newPos.y, newPos.z);
+
+        // Rotate camera to look at target
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        // Update mouse coords
+        mouse.pos.x = e.offsetX;
+        mouse.pos.y = e.offsetY;
+
+    };
+
+    const onWheel = function (e) {
+        e.preventDefault();
+        if (mouse.down) return;
+        const scale = 0.01;
+        const deltaRadius = e.deltaY * scale;
+        // Convert from cartesian to spherical coordinates
+        let spherical = new THREE.Spherical().setFromVector3(camera.position);
+
+        // Change spherical coordinates
+        spherical.set(spherical.radius + deltaRadius, spherical.phi, spherical.theta);
+
+        // Convert back to Cartesian
+        const newPos = new THREE.Vector3().setFromSpherical(spherical);
+
+        // Update Camera
+        camera.position.set(newPos.x, newPos.y, newPos.z);
+
+    };
+    //endregion
+
+    //region Event Listeners
+    document.addEventListener('mousedown', onMouseDown);
+    //document.addEventListener('touchstart', onMouseDown);
+    document.addEventListener('mouseup', onMouseUp);
+    //document.addEventListener('touchend', onMouseUp);
+    document.addEventListener('mousemove', onMouseMove);
+    //document.addEventListener('touchmove', onMouseMove);
+    document.addEventListener('wheel', onWheel);
+    //endregion
+
+};
+
+
+
