@@ -14,6 +14,7 @@ Construct appropriate mathematical operations to manipulate 3D objects
 
 This project has also lead me to learn how **orbitting cameras** work, as we weren't allowed to use the provided OrbitCamera.js module from ThreeJS.
 
+Live demo: https://ouked.github.io/FoVC_Coursework/WebGL-Coursework.html
 
 ## Controls 🎮
 
