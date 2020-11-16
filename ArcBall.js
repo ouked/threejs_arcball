@@ -15,28 +15,36 @@ let ArcBall = function (camera) {
         mouse.down = true;
     };
 
-    const onMouseUp = function(e) { mouse.down = false; };
+    const onMouseUp = function() { mouse.down = false; };
 
     const onMouseMove = function (e) {
         e.preventDefault();
         if (!mouse.down) return;
 
         // Get how far mouse has travelled (and scale)
-        const scale = 0.01;
+        const scale = 0.002;
         const deltaX = (mouse.pos.x - e.offsetX) * scale;
         const deltaY = (mouse.pos.y - e.offsetY) * scale;
 
-        // Convert from cartesian to spherical coordinates
-        let spherical = new THREE.Spherical().setFromVector3(camera.position);
+        const x = camera.position.x;
+        const y = camera.position.y;
+        const z = camera.position.z;
 
-        // Change spherical coordinates
-        spherical.set(spherical.radius, spherical.phi + deltaY, spherical.theta + deltaX);
 
-        // Convert back to Cartesian
-        const newPos = new THREE.Vector3().setFromSpherical(spherical);
+        const radius = camera.position.length();
+        let theta = Math.atan2(x, z ); // equator angle around y-up axis
+        let phi = Math.acos( Math.min(Math.max( y / radius, - 1), 1 )); // polar angle
 
-        // Update Camera
-        camera.position.set(newPos.x, newPos.y, newPos.z);
+
+        phi += deltaY;
+        theta += deltaX;
+
+
+        camera.position.set(
+            radius * Math.sin( phi ) * Math.sin( theta ),
+            radius * Math.cos( phi ),
+            radius * Math.sin( phi ) * Math.cos( theta )
+        );
 
         // Rotate camera to look at target
         camera.lookAt(new THREE.Vector3(0, 0, 0));
