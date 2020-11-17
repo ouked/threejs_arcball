@@ -40,19 +40,40 @@ function init()
     const floor = new THREE.GridHelper(10, 20, 0xffffff);
     scene.add(floor);
 
+
+    //region cube
     // TO DO: Draw a cube (requirement 1).
     const loader = new THREE.TextureLoader();
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
     const materials = [
-        new THREE.MeshBasicMaterial({map: loader.load('res/blue.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/green.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/red.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/orange.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/white.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/yellow.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/blue.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/green.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/red.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/orange.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/white.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/yellow.jpg')}),
     ];
     cube = new THREE.Mesh( geometry, materials );
     scene.add(cube);
+    //endregion
+
+
+    //region skybox
+    const skyboxGeometry = new THREE.BoxGeometry(100, 100, 100);
+    // Textures taken from:
+    // http://wwwtyro.github.io/space-3d/#animationSpeed=1&fov=80&nebulae=true&pointStars=true&resolution=1024&seed=romane&stars=true
+    const skyboxMaterials = [
+        new THREE.MeshBasicMaterial({map: loader.load('res/skybox/right.png'),  side: THREE.BackSide}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/skybox/left.png'),   side: THREE.BackSide}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/skybox/top.png'),    side: THREE.BackSide}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/skybox/bottom.png'), side: THREE.BackSide}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/skybox/front.png'),  side: THREE.BackSide}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/skybox/back.png'),   side: THREE.BackSide}),
+    ];
+    let skybox = new THREE.Mesh( skyboxGeometry, skyboxMaterials );
+    scene.add(skybox);
+    //endregion
+
 
     const edges = new THREE.EdgesGeometry( geometry );
     line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
