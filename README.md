@@ -24,6 +24,7 @@ https://ouked.github.io/FoVC_Coursework/WebGL-Coursework.html
 |        Controls       |  Key  |
 |-----------------------|-------|
 | Orbit camera          | MOUSE |
+| Pan camera            | SHIFT+MOUSE|
 | Zoom                  | SCROLL|
 | Fly left              |   ⬅️  |
 | Fly right             |   ➡️  |
