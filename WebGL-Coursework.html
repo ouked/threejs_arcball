@@ -13,11 +13,57 @@
             width: 100%;
             height: 100%;
         }
-    </style>
+
+
+        div#hud
+        {
+            position: absolute;
+            z-index: 100;
+            top: 10px;
+            left: 10px;
+            color: red;
+            font-family: "Lucida Console", Courier, monospace;
+            font-size: 20px;
+        }
+
+        div#hud tr,
+        div#hud td,
+        div#hud th {
+            color: red;
+            font-family: "Lucida Console", Courier, monospace;
+            font-size: 20px;
+        }
+
+        div#hud.hidden {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 2s, opacity 2s linear;
+        }
+
+        div#credit {
+            position: absolute;
+            z-index: 100;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            color: lightseagreen;
+            font-family: "Lucida Console", Courier, monospace;
+            font-size: 15px;
+        }
+
+        /*https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting*/
+        .noselect {
+            pointer-events:none;
+        }
+
+     </style>
 </head>
 <body>
+    <div id = "hud" class="hidden noselect">Hello world.</div>
+    <div id = "credit" class="noselect">Made by Alex Dawkins 2020 | github/ouked</div>
 	<script src="three.js"></script>
     <script src="ArcBall.js"></script>
-	<script src="app.js"></script>
+    <script src="app.js"></script>
+    <script src="keys.js"></script>
 </body>
 </html>
