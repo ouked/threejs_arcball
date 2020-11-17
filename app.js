@@ -20,7 +20,34 @@ let cameraMove = {
 };
 const rotationSpeed = 0.01;
 const cameraSpeed = 0.1;
+const githubURL = "http://github.com/ouked/FoVC_Coursework/";
 // Initialise the scene, and draw it for the first time.
+
+
+let messageTimeout;
+const showMessage = function(message, duration) {
+
+    if (duration === undefined) {
+        duration = 2500;
+    }
+    const hud = document.getElementById("hud");
+    hud.innerHTML = message;
+    hud.classList.remove("hidden");
+    clearTimeout(messageTimeout);
+    messageTimeout = setTimeout(function()
+    {
+        hud.classList.add("hidden");
+    }, duration);
+};
+
+const showHelp = function() {
+
+    const helpText = "Orbit - MOUSE<br>Pan - SHIFT+MOUSE<br>Zoom - SCROLL<br>Fly - ARROWS, [Q], [A]<br>Reset camera - [0]<br>Rotate cube - [X], [Y], [Z]<br>Render modes - [V], [E], [F]<br><br>Help - [H]<br>"+
+    "<br>Open GitHub - [G]";
+    showMessage(helpText, 15000);
+};
+
+
 init();
 animate();
 
@@ -34,7 +61,7 @@ function init()
     camera.position.set(3, 4, 5);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    new ArcBall(camera);
+    new ArcBall(camera, showMessage);
 
     // Draw a helper grid in the x-z plane (note: y is up).
     const floor = new THREE.GridHelper(10, 20, 0xffffff);
@@ -94,6 +121,9 @@ function init()
 
     // Handle resizing of the browser window.
     window.addEventListener('resize', handleResize, false);
+
+
+    showMessage("Press [H] for help.", 5000)
 }
 
 // Handle resizing of the browser window.
@@ -131,91 +161,4 @@ function moveCamera() {
 
     if (cameraMove.up)          camera.translateY( cameraSpeed );
     if (cameraMove.down)        camera.translateY( -cameraSpeed );
-}
-
-
-// Listen for keyboard events, to react to them.
-// Note: there are also other event listeners, e.g. for mouse events.
-document.addEventListener('keydown', handleKeyDown);
-document.addEventListener('keyup', handleKeyUp);
-
-// Handle keyboard presses.
-function handleKeyDown(event)
-{
-    switch (event.keyCode)
-    {
-        // Render modes.
-        case 70: // f = face
-            scene.remove(line);
-            scene.add(cube);
-            cube.material.wireframe = false;
-            break;
-
-        case 69: // e = edge
-            scene.remove(line);
-            scene.add(cube);
-            cube.material.wireframe = true;
-            break;
-
-        case 86: // v = vertex
-            scene.remove(cube);
-            scene.add( line );
-            break;
-
-        // TO DO: add code for starting/stopping rotations (requirement 3).
-        // Cube Rotation
-        case 88: // x = rotate cube in X
-            rotate.x = !rotate.x;
-            break;
-        case 89: // y = rotate cube in y
-            rotate.y = !rotate.y;
-            break;
-        case 90: // z = rotate cube in z
-            rotate.z = !rotate.z;
-            break;
-
-        // Camera Movement
-        case 65: // a = down
-            cameraMove.down = true;
-            break;
-        case 81: // q = up
-            cameraMove.up = true;
-            break;
-        case 37: // left
-            cameraMove.left = true;
-            break;
-        case 38: // forward
-            cameraMove.forward = true;
-            break;
-        case 39: // right
-            cameraMove.right = true;
-            break;
-        case 40: // back
-            cameraMove.backward = true;
-            break;
-    }
-}
-
-function handleKeyUp(event) {
-    switch(event.keyCode) {
-        // Camera Movement
-        case 65: // a = down
-            cameraMove.down = false;
-            break;
-        case 81: // q = up
-            cameraMove.up = false;
-            break;
-        case 37: // left
-            cameraMove.left = false;
-            break;
-        case 38: // forward
-            cameraMove.forward = false;
-            break;
-        case 39: // right
-            cameraMove.right = false;
-            break;
-        case 40: // back
-            cameraMove.backward = false;
-            break;
-    }
 }
