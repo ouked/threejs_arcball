@@ -9,6 +9,7 @@ let ArcBall = function (camera) {
         down: false
     };
 
+    const minRadius = 1;
     //region Mouse Events
     const onMouseDown = function(e) {
         mouse.pos = new THREE.Vector2(e.offsetX, e.offsetY);
@@ -63,8 +64,9 @@ let ArcBall = function (camera) {
         // Convert from cartesian to spherical coordinates
         let spherical = new THREE.Spherical().setFromVector3(camera.position);
 
+        const newRadius = Math.max(spherical.radius + deltaRadius, minRadius);
         // Change spherical coordinates
-        spherical.set(spherical.radius + deltaRadius, spherical.phi, spherical.theta);
+        spherical.set(newRadius, spherical.phi, spherical.theta);
 
         // Convert back to Cartesian
         const newPos = new THREE.Vector3().setFromSpherical(spherical);

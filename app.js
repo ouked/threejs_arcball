@@ -33,18 +33,25 @@ function init()
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(3, 4, 5);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
+
     new ArcBall(camera);
 
     // Draw a helper grid in the x-z plane (note: y is up).
     const floor = new THREE.GridHelper(10, 20, 0xffffff);
     scene.add(floor);
 
-
-
     // TO DO: Draw a cube (requirement 1).
+    const loader = new THREE.TextureLoader();
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial( {color: 0xaaaaaa} );
-    cube = new THREE.Mesh( geometry, material );
+    const materials = [
+        new THREE.MeshBasicMaterial({map: loader.load('res/blue.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/green.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/red.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/orange.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/white.jpg')}),
+        new THREE.MeshBasicMaterial({map: loader.load('res/yellow.jpg')}),
+    ];
+    cube = new THREE.Mesh( geometry, materials );
     scene.add(cube);
 
     const edges = new THREE.EdgesGeometry( geometry );
@@ -63,7 +70,6 @@ function init()
     renderer.setPixelRatio(window.devicePixelRatio); // HiDPI/retina rendering
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-
 
     // Handle resizing of the browser window.
     window.addEventListener('resize', handleResize, false);
