@@ -35,3 +35,5 @@ https://ouked.github.io/FoVC_Coursework/WebGL-Coursework.html
 | Face render mode      | F     |
 | Vertex render mode    | V     |
 | Wireframe render mode | E     |
+| Reset camera          | 0     |
+| Help                  | H     |
