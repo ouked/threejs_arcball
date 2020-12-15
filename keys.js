@@ -10,20 +10,40 @@ function handleKeyDown(event)
     {
         // Render modes.
         case 70: // f = face
+            scene.remove(points);
             scene.remove(line);
             scene.add(cube);
-            cube.material.wireframe = false;
             break;
 
         case 69: // e = edge
-            scene.remove(line);
-            scene.add(cube);
-            cube.material.wireframe = true;
+            scene.remove(points);
+            scene.remove(cube);
+            scene.add(line);
             break;
 
         case 86: // v = vertex
             scene.remove(cube);
-            scene.add( line );
+            scene.remove(line);
+            scene.add(points);
+            break;
+
+        //    Peter
+        case 74: // j = peter face
+            scene.remove(peterPoints);
+            scene.remove(peterEdges);
+            scene.add(peter);
+            break;
+
+        case 75: // k = peter line
+            scene.remove(peterPoints);
+            scene.remove(peter);
+            scene.add(peterEdges);
+            break;
+
+        case 76: // l = peter vertex
+            scene.remove(peter);
+            scene.remove(peterEdges);
+            scene.add(peterPoints);
             break;
 
         // TO DO: add code for starting/stopping rotations (requirement 3).
