@@ -1,7 +1,7 @@
 "use strict"; // https://stackoverflow.com/q/1335851/72470
 // Global variables that are available in all functions.
 // Note: You can add your own here, e.g. to store the rendering mode.
-let camera, scene, renderer, mesh, cube, line, controls, floor, directionalLight;
+let camera, scene, renderer, mesh, cube, line, controls, floor, directionalLight, points, peterEdges, peterPoints, peter;
 
 let rotate = {
     x: false,
@@ -41,7 +41,7 @@ const showMessage = function(message, duration) {
 
 const showHelp = function() {
 
-    const helpText = "Orbit - MOUSE<br>Pan - SHIFT+MOUSE<br>Zoom - SCROLL<br>Fly - ARROWS, [Q], [A]<br>Reset camera - [0]<br>Rotate cube - [X], [Y], [Z]<br>Render modes - [V], [E], [F]<br><br>Help - [H]<br>"+
+    const helpText = "Orbit - MOUSE<br>Pan - SHIFT+MOUSE<br>Zoom - SCROLL<br>Fly - ARROWS, [Q], [A]<br>Reset camera - [0]<br>Rotate cube - [X], [Y], [Z]<br>Cube render modes - [V], [E], [F]<br>Peter render modes - [J], [K], [L]<br><br>Help - [H]<br>"+
     "<br>Open GitHub - [G]";
     showMessage(helpText, 15000);
 };
@@ -80,7 +80,9 @@ function init()
         new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/white.jpg')}),
         new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/yellow.jpg')}),
     ];
+    line = new THREE.Line(geometry, new THREE.PointsMaterial({color: 0xff66ed, size: 0.2}));
     cube = new THREE.Mesh( geometry, materials );
+    points = new THREE.Points(geometry, new THREE.PointsMaterial({color: 0xff66ed, size: 0.1}));
     scene.add(cube);
     //endregion
 
@@ -101,10 +103,6 @@ function init()
     scene.add(skybox);
     //endregion
 
-
-    const edges = new THREE.EdgesGeometry( geometry );
-    line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
-
     // TO DO: Visualise the axes of the global coordinate system (requirement 2).
     const axesHelper = new THREE.AxesHelper( 5 );
     scene.add( axesHelper );
@@ -114,32 +112,22 @@ function init()
     objLoader.load(
         'res/models/bunny-5000.obj',
         function (object) {
-            let bunnyGeometry = object.children[0].geometry;
-            bunnyGeometry.scale(0.48, 0.48, 0.48);
-            bunnyGeometry.translate(-0.5, 0.01, 0);
+            let peterGeometry = object.children[0].geometry;
+            peterGeometry.scale(0.48, 0.48, 0.48);
+            peterGeometry.translate(-0.5, 0.01, 0);
 
-            const bunny = new THREE.Mesh(bunnyGeometry, new THREE.MeshBasicMaterial({ color: 0xfffdd0 }));
-            bunny.name = "bunny";
-            console.log(bunnyGeometry);
-            scene.add(bunny);
+            peter = new THREE.Mesh(peterGeometry, new THREE.MeshBasicMaterial({ color: 0x14f7ff }));
+            peter.name = "Peter";
+            scene.add(peter);
 
-            const edgeBunnyGeometry = new THREE.EdgesGeometry(bunnyGeometry);
-            const edgeBunnyMaterial = new THREE.LineBasicMaterial({ color: 0xfffdd0 });
-            const edgeBunny = new THREE.LineSegments(edgeBunnyGeometry, edgeBunnyMaterial);
-            edgeBunny.name = "edgeBunny";
-            scene.add(edgeBunny);
+            peterEdges = new THREE.LineSegments(
+                new THREE.EdgesGeometry(peterGeometry),
+                new THREE.LineBasicMaterial({ color: 0x14f7ff })
+            );
+            // scene.add(peterEdges);
 
-            const pointsBunnyGeometry = bunnyGeometry;
-            const pointsBunnyMaterial = new THREE.PointsMaterial({ color: 0xfffdd0, size: 0.01 });
-            const pointsBunny = new THREE.Points(pointsBunnyGeometry, pointsBunnyMaterial);
-            pointsBunny.name = "pointsBunny";
-            scene.add(pointsBunny);
-        },
-        function (xhr) {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-        function (error) {
-            console.log('An error happened');
+            peterPoints = new THREE.Points(peterGeometry, new THREE.PointsMaterial({ color: 0x14f7ff, size: 0.01 }));
+            // scene.add(peterPoints);
         }
     );
 
@@ -182,7 +170,12 @@ function animate()
     for (const dimension in rotate){
         if (rotate.hasOwnProperty(dimension) && rotate[dimension] === true) {
             cube.rotation[dimension] -= rotationSpeed;
+            points.rotation[dimension] -= rotationSpeed;
             line.rotation[dimension] -= rotationSpeed;
+
+            peter.rotation[dimension] += rotationSpeed;
+            peterPoints.rotation[dimension] += rotationSpeed;
+            peterEdges.rotation[dimension] += rotationSpeed;
         }
     }
 
