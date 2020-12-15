@@ -1,8 +1,7 @@
 "use strict"; // https://stackoverflow.com/q/1335851/72470
-
 // Global variables that are available in all functions.
 // Note: You can add your own here, e.g. to store the rendering mode.
-let camera, scene, renderer, mesh, cube, line, controls, floor;
+let camera, scene, renderer, mesh, cube, line, controls, floor, directionalLight;
 
 let rotate = {
     x: false,
@@ -68,17 +67,18 @@ function init()
     scene.add(floor);
 
 
+
     //region cube
     // TO DO: Draw a cube (requirement 1).
     const loader = new THREE.TextureLoader();
-    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    const geometry = new THREE.BoxGeometry( 2, 2, 2 );
     const materials = [
-        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/blue.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/green.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/red.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/orange.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/white.jpg')}),
-        new THREE.MeshBasicMaterial({map: loader.load('res/rubiks/yellow.jpg')}),
+        new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/blue.jpg')}),
+        new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/green.jpg')}),
+        new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/red.jpg')}),
+        new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/orange.jpg')}),
+        new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/white.jpg')}),
+        new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/yellow.jpg')}),
     ];
     cube = new THREE.Mesh( geometry, materials );
     scene.add(cube);
@@ -109,9 +109,48 @@ function init()
     const axesHelper = new THREE.AxesHelper( 5 );
     scene.add( axesHelper );
 
+    let objLoader = new THREE.OBJLoader();
+
+    objLoader.load(
+        'res/models/bunny-5000.obj',
+        function (object) {
+            let bunnyGeometry = object.children[0].geometry;
+            bunnyGeometry.scale(0.48, 0.48, 0.48);
+            bunnyGeometry.translate(-0.5, 0.01, 0);
+
+            const bunny = new THREE.Mesh(bunnyGeometry, new THREE.MeshBasicMaterial({ color: 0xfffdd0 }));
+            bunny.name = "bunny";
+            console.log(bunnyGeometry);
+            scene.add(bunny);
+
+            const edgeBunnyGeometry = new THREE.EdgesGeometry(bunnyGeometry);
+            const edgeBunnyMaterial = new THREE.LineBasicMaterial({ color: 0xfffdd0 });
+            const edgeBunny = new THREE.LineSegments(edgeBunnyGeometry, edgeBunnyMaterial);
+            edgeBunny.name = "edgeBunny";
+            scene.add(edgeBunny);
+
+            const pointsBunnyGeometry = bunnyGeometry;
+            const pointsBunnyMaterial = new THREE.PointsMaterial({ color: 0xfffdd0, size: 0.01 });
+            const pointsBunny = new THREE.Points(pointsBunnyGeometry, pointsBunnyMaterial);
+            pointsBunny.name = "pointsBunny";
+            scene.add(pointsBunny);
+        },
+        function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        function (error) {
+            console.log('An error happened');
+        }
+    );
+
+
+
+
     // Basic ambient lighting.
-    scene.add(new THREE.AmbientLight(0xffffff));
-    // TO DO: add more complex lighting for 'face' rendering mode (requirement 4).
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+    scene.add( directionalLight );
+    directionalLight.position.set(7,0,7);
 
     // Set up the Web GL renderer.
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -146,6 +185,12 @@ function animate()
             line.rotation[dimension] -= rotationSpeed;
         }
     }
+
+
+    let lightCoords = new THREE.Spherical().setFromVector3(directionalLight.position);
+    lightCoords.theta += 0.02;
+    const v3 = new THREE.Vector3().setFromSpherical(lightCoords);
+    directionalLight.position.set(v3.x, v3.y, v3.z);
 
     moveCamera();
     // Render the current scene to the screen.
