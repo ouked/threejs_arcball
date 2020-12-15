@@ -21,7 +21,7 @@ From the specification:
 
 This project has also taught how **orbiting cameras** work, as we weren't allowed to use the provided OrbitCamera.js module from ThreeJS.
 ## Live demo
-https://ouked.github.io/FoVC_Coursework/WebGL-Coursework.html
+https://ouked.github.io/threeJS-demo/WebGL-Coursework.html
 
 ### Controls 🎮
 
