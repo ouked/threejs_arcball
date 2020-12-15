@@ -32,7 +32,7 @@ https://ouked.github.io/FoVC_Coursework/WebGL-Coursework.html
 | Pan camera            | ```SHIFT+MOUSE```|
 | Zoom                  | ```SCROLL```|
 | Fly                   |   ```ARROW KEYS```, ```Q```, ```A``` |
-| Rotate cube           | ```X,Y,Z``` |
+| Rotate cube           | ```X```,```Y```,```Z``` |
 | Face render mode      | ```F```     |
 | Vertex render mode    | ```V```     |
 | Wireframe render mode | ```E```     |
