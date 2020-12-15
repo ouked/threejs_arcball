@@ -29,7 +29,7 @@ let ArcBall = function (camera, messageHandler) {
     const minRadius = 1;
 
     // Home plane to raycast to.
-    const plane = new THREE.Plane( new THREE.Vector3( 0, 1, 0 ) );
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0));
 
     // Display plane?
     if (displayPlaneHelper) {
@@ -40,7 +40,7 @@ let ArcBall = function (camera, messageHandler) {
     /**
      * Updates lookAtPoint to either what the camera is looking at or 0,0,0 if the camera is under the
      */
-    const updateLookAtPoint = function() {
+    const updateLookAtPoint = function () {
         const raycaster = new THREE.Raycaster();
         raycaster.set(camera.getWorldPosition(), camera.getWorldDirection());
         const intersection = raycaster.ray.intersectPlane(plane);
@@ -54,7 +54,7 @@ let ArcBall = function (camera, messageHandler) {
     };
     updateLookAtPoint();
 
-    const moveCameraArc = function(deltaX, deltaY) {
+    const moveCameraArc = function (deltaX, deltaY) {
         camera.position.sub(lookAtPoint);
 
         const x = camera.position.x;
@@ -62,16 +62,16 @@ let ArcBall = function (camera, messageHandler) {
         const z = camera.position.z;
 
         const radius = camera.position.length();
-        let theta = Math.atan2(x, z ); // equator angle around y-up axis
-        let phi = Math.acos( Math.min(Math.max( y / radius, - 1), 1 )); // polar angle
+        let theta = Math.atan2(x, z); // equator angle around y-up axis
+        let phi = Math.acos(Math.min(Math.max(y / radius, -1), 1)); // polar angle
 
         phi += deltaY;
         theta += deltaX;
 
         camera.position.set(
-            (radius * Math.sin( phi ) * Math.sin( theta )),
-            (radius * Math.cos( phi )),
-            (radius * Math.sin( phi ) * Math.cos( theta ))
+            (radius * Math.sin(phi) * Math.sin(theta)),
+            (radius * Math.cos(phi)),
+            (radius * Math.sin(phi) * Math.cos(theta))
         );
 
         camera.position.add(lookAtPoint);
@@ -80,7 +80,7 @@ let ArcBall = function (camera, messageHandler) {
         camera.lookAt(lookAtPoint);
     };
 
-    const moveCameraPan = function(deltaX, deltaY) {
+    const moveCameraPan = function (deltaX, deltaY) {
         camera.translateX(deltaX);
         camera.translateY(-deltaY);
 
@@ -88,13 +88,15 @@ let ArcBall = function (camera, messageHandler) {
     };
 
     //region Mouse Events
-    const onMouseDown = function(e) {
+    const onMouseDown = function (e) {
         mouse.pos = new THREE.Vector2(e.offsetX, e.offsetY);
         mouse.down = true;
         updateLookAtPoint();
     };
 
-    const onMouseUp = function() { mouse.down = false; };
+    const onMouseUp = function () {
+        mouse.down = false;
+    };
 
     const onMouseMove = function (e) {
         e.preventDefault();
@@ -102,10 +104,10 @@ let ArcBall = function (camera, messageHandler) {
         const deltaX = (mouse.pos.x - e.offsetX);
         const deltaY = (mouse.pos.y - e.offsetY);
         if (e.shiftKey) {
-            moveCameraPan(deltaX*panScale, deltaY*panScale);
+            moveCameraPan(deltaX * panScale, deltaY * panScale);
         } else {
 
-            moveCameraArc(deltaX*arcBallScale, deltaY *  arcBallScale);
+            moveCameraArc(deltaX * arcBallScale, deltaY * arcBallScale);
         }
         // Get how far mouse has travelled (and scale)
 
@@ -118,7 +120,7 @@ let ArcBall = function (camera, messageHandler) {
     const onWheel = function (e) {
         e.preventDefault();
         if (mouse.down) return;
-        const deltaZ =  e.deltaY * zoomScale;
+        const deltaZ = e.deltaY * zoomScale;
         if (camera.position.distanceTo(lookAtPoint) + deltaZ > minRadius) {
             camera.translateZ(deltaZ);
         } else {
