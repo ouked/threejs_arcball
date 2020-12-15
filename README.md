@@ -31,12 +31,7 @@ https://ouked.github.io/FoVC_Coursework/WebGL-Coursework.html
 | Orbit camera          | ```MOUSE```      |
 | Pan camera            | ```SHIFT+MOUSE```|
 | Zoom                  | ```SCROLL```|
-| Fly left              |   ⬅️  |
-| Fly right             |   ➡️  |
-| Fly forwards          |   ⬆️  |
-| Fly backwards         |   ⬇️  |
-| Fly up                |   ```Q```   |
-| Fly down              |   ```A```   |
+| Fly                   |   ```ARROW KEYS```, ```Q```, ```A``` |
 | Rotate cube           | ```X,Y,Z``` |
 | Face render mode      | ```F```     |
 | Vertex render mode    | ```V```     |
