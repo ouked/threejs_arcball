@@ -3,23 +3,47 @@
 
 "use strict";
 
+/**
+ * ArcBall Camera Controller
+ * @param camera Three.js camera to control
+ * @param messageHandler Function to display messages
+ * @constructor
+ */
 let ArcBall = function (camera, messageHandler=null) {
-    // Scalar for moving camera in Arc Ball mode
+    /**
+     * Scalar to move camera by in ArcBall mode
+     * @type {number}
+     */
     const arcBallScale = 0.002;
 
-    // Scalar for moving camera in Pan mode
+    /**
+     * Scalar for moving camera in Pan mode
+     * @type {number}
+     */
     const panScale = 0.01;
 
-    // Scalar for zooming camera
+    /**
+     * Scalar for zooming camera
+     * @type {number}
+     */
     const zoomScale = 0.01;
 
-    // Scalar for touch input
+    /**
+     * Scalar for touch input
+     * @type {number}
+     */
     const touchMultiplier = 5.0;
 
-    // Display plane helper?
+    /**
+     * Display plane to the user
+     * @type {boolean}
+     */
     const displayPlaneHelper = false;
 
-    // Store values about mouse
+    /**
+     * Object to store details about mouse
+     * @type {{pos: Vector2, down: boolean}}
+     */
     let mouse = {
         pos: new THREE.Vector2(),
         down: false,
@@ -30,13 +54,21 @@ let ArcBall = function (camera, messageHandler=null) {
         messageHandler = () => {return true};
     }
 
-    // Point that the camera is looking at
+    /**
+     * Point the camera is looking at
+     */
     let lookAtPoint;
 
-    // Minimum radius to zoom to
+    /**
+     * Minimum radius to zoom to
+     * @type {number}
+     */
     const minRadius = 1;
 
-    // Home plane to raycast to.
+    /**
+     * Plane for the camera to raycast to
+     * @type {Plane}
+     */
     const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0));
 
     // Display plane?
@@ -62,6 +94,11 @@ let ArcBall = function (camera, messageHandler=null) {
     };
     updateLookAtPoint();
 
+    /**
+     * Move camera in arc mode
+     * @param deltaX Distance the mouse has moved in x-direction since last update
+     * @param deltaY Distance the mouse has moved in y-direction since last update
+     */
     const moveCameraArc = function (deltaX, deltaY) {
         camera.position.sub(lookAtPoint);
 
@@ -88,6 +125,11 @@ let ArcBall = function (camera, messageHandler=null) {
         camera.lookAt(lookAtPoint);
     };
 
+    /**
+     * Move camera in pan mode
+     * @param deltaX Distance the mouse has moved in x-direction since last update
+     * @param deltaY Distance the mouse has moved in y-direction since last update
+     */
     const moveCameraPan = function (deltaX, deltaY) {
         camera.translateX(deltaX);
         camera.translateY(-deltaY);
@@ -96,16 +138,27 @@ let ArcBall = function (camera, messageHandler=null) {
     };
 
     //region Mouse Events
+    /**
+     * Mouse down event handler
+     * @param e Event
+     */
     const onMouseDown = function (e) {
         mouse.pos = new THREE.Vector2(e.offsetX, e.offsetY);
         mouse.down = true;
         updateLookAtPoint();
     };
 
+    /**
+     * Mouse up event handler
+     */
     const onMouseUp = function () {
         mouse.down = false;
     };
 
+    /**
+     * Mouse movement handler
+     * @param e Event
+     */
     const onMouseMove = function (e) {
         e.preventDefault();
         if (!mouse.down) return;
@@ -125,6 +178,10 @@ let ArcBall = function (camera, messageHandler=null) {
 
     };
 
+    /**
+     * Wheel handler
+     * @param e Event handler
+     */
     const onWheel = function (e) {
         e.preventDefault();
         if (mouse.down) return;
@@ -136,16 +193,29 @@ let ArcBall = function (camera, messageHandler=null) {
         }
     };
 
+    /**
+     * Touch start handler
+     * @param e Event
+     */
     const touchStart = function(e) {
         const touch = e.touches[0];
         mouse.pos = new THREE.Vector2(touch.pageX, touch.pageY);
         mouse.down = true;
     };
 
+    /**
+     * Touch end handler
+     * @param e Event
+     */
     const touchEnd = function(e) {
         mouse.pos = new THREE.Vector2(e.offsetX, e.offsetY);
         mouse.down = false;
     };
+
+    /**
+     * Touch move handler
+     * @param e Event
+     */
     const touchMove = function(e) {
         const touch = e.touches[0];
         const deltaX = (mouse.pos.x - touch.pageX);
@@ -158,6 +228,7 @@ let ArcBall = function (camera, messageHandler=null) {
     //endregion
 
     //region Event Listeners
+    // Subscribe to events
     document.addEventListener('mousedown', onMouseDown);
     document.addEventListener('touchstart', touchStart);
     document.addEventListener('mouseup', onMouseUp);
