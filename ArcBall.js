@@ -3,7 +3,7 @@
 
 "use strict";
 
-let ArcBall = function (camera, messageHandler) {
+let ArcBall = function (camera, messageHandler=null) {
     // Scalar for moving camera in Arc Ball mode
     const arcBallScale = 0.002;
 
@@ -13,6 +13,9 @@ let ArcBall = function (camera, messageHandler) {
     // Scalar for zooming camera
     const zoomScale = 0.01;
 
+    // Scalar for touch input
+    const touchMultiplier = 5.0;
+
     // Display plane helper?
     const displayPlaneHelper = false;
 
@@ -21,6 +24,11 @@ let ArcBall = function (camera, messageHandler) {
         pos: new THREE.Vector2(),
         down: false,
     };
+
+    // If no messageHandler is given, ignore messages.
+    if (messageHandler === null) {
+        messageHandler = () => {return true};
+    }
 
     // Point that the camera is looking at
     let lookAtPoint;
@@ -127,15 +135,35 @@ let ArcBall = function (camera, messageHandler) {
             messageHandler("Minimum zoom radius reached!")
         }
     };
+
+    const touchStart = function(e) {
+        const touch = e.touches[0];
+        mouse.pos = new THREE.Vector2(touch.pageX, touch.pageY);
+        mouse.down = true;
+    };
+
+    const touchEnd = function(e) {
+        mouse.pos = new THREE.Vector2(e.offsetX, e.offsetY);
+        mouse.down = false;
+    };
+    const touchMove = function(e) {
+        const touch = e.touches[0];
+        const deltaX = (mouse.pos.x - touch.pageX);
+        const deltaY = (mouse.pos.y - touch.pageY);
+        console.log(touch);
+        moveCameraArc(deltaX * arcBallScale * touchMultiplier, deltaY * arcBallScale * touchMultiplier);
+        // Update mouse coords
+        mouse.pos = new THREE.Vector2(touch.pageX, touch.pageY);
+    };
     //endregion
 
     //region Event Listeners
     document.addEventListener('mousedown', onMouseDown);
-    //document.addEventListener('touchstart', onMouseDown);
+    document.addEventListener('touchstart', touchStart);
     document.addEventListener('mouseup', onMouseUp);
-    //document.addEventListener('touchend', onMouseUp);
+    document.addEventListener('touchend', touchEnd);
     document.addEventListener('mousemove', onMouseMove);
-    //document.addEventListener('touchmove', onMouseMove);
+    document.addEventListener('touchmove', touchMove);
     document.addEventListener('wheel', onWheel);
     //endregion
 
