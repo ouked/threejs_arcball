@@ -1,7 +1,6 @@
 # ThreeJS Demo 📦
 A simple ThreeJS project for my *Fundamental of Visual Computing* module at University of Bath. 
 
-
 ![Screenshot of Project](https://github.com/ouked/FoVC_Coursework/blob/master/screenshot.png)
 
 
