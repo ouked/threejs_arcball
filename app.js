@@ -39,7 +39,7 @@ const cameraSpeed = 0.1;
  * Link to GitHub repo
  * @type {string}
  */
-const githubURL = "https://ouked.github.io/threeJS-demo/";
+const githubURL = "https://github.com";
 // Initialise the scene, and draw it for the first time.
 
 /**

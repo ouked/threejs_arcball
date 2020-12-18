@@ -1,4 +1,4 @@
-// Alex Dawkins ArcBall
+// ------------- ArcBall
 // For three.js
 
 "use strict";
