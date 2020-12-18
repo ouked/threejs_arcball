@@ -1,6 +1,6 @@
+
 "use strict"; // https://stackoverflow.com/q/1335851/72470
 // Global variables that are available in all functions.
-// Note: You can add your own here, e.g. to store the rendering mode.
 let camera, scene, renderer, mesh, cube, line, controls, floor, directionalLight, points, peterEdges, peterPoints, peter;
 
 let rotate = {
@@ -80,8 +80,10 @@ function init()
         new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/white.jpg')}),
         new THREE.MeshPhongMaterial({map: loader.load('res/rubiks/yellow.jpg')}),
     ];
+
     line = new THREE.Line(geometry, new THREE.PointsMaterial({color: 0xff66ed, size: 0.2}));
-    cube = new THREE.Mesh( geometry, materials );
+
+    cube = new THREE.Mesh( geometry, materials);
     points = new THREE.Points(geometry, new THREE.PointsMaterial({color: 0xff66ed, size: 0.1}));
     scene.add(cube);
     //endregion
