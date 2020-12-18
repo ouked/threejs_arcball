@@ -3,7 +3,10 @@
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
 
-// Handle keyboard presses.
+/**
+ * Handle keyDown events
+ * @param event keyDown event
+ */
 function handleKeyDown(event)
 {
     switch (event.keyCode)
@@ -46,7 +49,6 @@ function handleKeyDown(event)
             scene.add(peterPoints);
             break;
 
-        // TO DO: add code for starting/stopping rotations (requirement 3).
         // Cube Rotation
         case 88: // x = rotate cube in X
             rotate.x = !rotate.x;
@@ -92,6 +94,10 @@ function handleKeyDown(event)
     }
 }
 
+/**
+ * Handle keyUp events
+ * @param event keyUp Event
+ */
 function handleKeyUp(event) {
     switch(event.keyCode) {
         // Camera Movement
