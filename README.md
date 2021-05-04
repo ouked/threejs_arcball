@@ -24,7 +24,7 @@ This project has also taught how **orbiting cameras** work, as we weren't allowe
 
 
 ## Live demo ⚡️
-https://ouked.github.io/threeJS-demo/WebGL-Coursework.html
+https://alex-dawkins.com/threejs_arcball/WebGL-Coursework.html
 
 ### Controls 🎮
 
